@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Project 5</title>
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+  <form class="searchForm" method="get">
+    <h4>Search</h4>
+    <input type="text" class ="searchBar" data-bind="textInput: searchLocation">
+  </form>
+
+  <div id="searchMap" class="row">
+
+    <div id="results" class="col-xs-2 col-md-2">
+
+      <!-- <div class="row">
+
+        <div id="key">Key Locations</div>
+
+        <img id="menu" class="col-xs-2 col-md-2" src="images/menu.png" alt="slider" data-bind="click: menuVisibility">
+
+      </div> -->
+
+      <div id="key">Key Locations</div>
+
+      <div data-bind="foreach: favList">
+
+        <h5 id="favLoc" data-bind="text: title, click:"></h5>
+
+      </div>
+    </div>
+
+
+    <div id="map" class="col-xs-10 col-md-10"></div>
+  </div>
+
+  <script src="js/lib/knockout-3.2.0.js"></script>
+  <script src="js/app.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDM48rdqHUOp2yIErJTxDFw_IDi6fTMMHI&callback=initMap" async defer ></script>
+
+</body>
+</html>

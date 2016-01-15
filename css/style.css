@@ -1,0 +1,73 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.searchForm {
+  height: 30px;
+  width: 100%;
+  display: inline-flex;
+}
+
+h4 {
+  width: auto;
+  margin: 0px;
+  padding-top: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: #d3d3d3;
+  text-align: center;
+  font-size: 21px;
+}
+
+h5 {
+  padding-left: 5px;
+  font-size: 17px;
+}
+
+.searchBar {
+  height: 100%;
+  width: 100%;
+  border: 0px;
+  padding: 0px;
+  font-size: 21px;
+}
+
+#searchMap {
+  height: 100%;
+  padding: 0px;
+}
+
+#results {
+  height: inherit;
+  font-size: 16px;
+  padding-right: 20px;
+
+}
+
+#menu {
+  max-height: 50px;
+  max-width: 50px;
+
+}
+
+#map {
+  height: inherit;
+}
+
+#key, #favLoc {
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: #e7e7e7;
+  margin: 0;
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-bottom: 5px;
+}
+
+#key {
+  background-color: #c7c7c7;
+  font-weight: bold;
+}
