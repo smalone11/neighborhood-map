@@ -52,31 +52,58 @@ var initMap = function () {
 // Adds markers to the map.
 var setMarkers = function (map, favList) {
   for (var i = 0; i < favList.length; i++) {
+    favList[i].zIndex = i;
+
     var fav = favList[i];
+
     var marker = new google.maps.Marker({
       position: {lat: fav.lat, lng: fav.lng},
       map: map,
       title: fav.title,
-      zIndex: fav.zIndex
+      zIndex: i
     });
+
+    var info = new google.maps.InfoWindow({
+      content: 'poop'
+    });
+
+    marker.addListener('click', function () {
+      marker.setAnimation(google.maps.Animation.BOUNCE);
+      setTimeout(function() {
+        marker.setAnimation(null);
+      }, 1400);
+    });
+
+    marker.addListener('click', function() {
+      info.open(map, marker);
+    });
+
     markers.push(marker);
   }
 }
 
+// Adds a bounce animation to corresponding marker
+function toggleBounce (mark) {
+  mark.setAnimation(google.maps.Animation.BOUNCE);
+  setTimeout(function() {
+    mark.setAnimation(null);
+  }, 1400);
+}
+
 // Sets the map on all markers in the array.
-function setMapOnAll(map) {
+function setMapOnAll (map) {
   for (var i = 0; i < markers.length; i++) {
     markers[i].setMap(map);
   }
 }
 
 // Removes the markers from the map, but keeps them in the array.
-function clearMarkers() {
+function clearMarkers () {
   setMapOnAll(null);
 }
 
 // Deletes all markers in the array by removing references to them.
-function deleteMarkers() {
+function deleteMarkers () {
   clearMarkers();
   markers = [];
 }
@@ -87,60 +114,64 @@ var ViewModel = function () {
   self.favList = ko.observableArray([]);
   self.searchLocation = ko.observable('');
 
-  //Populate observable array from favorites
+  // Populate observable array from favorites
   favorites.forEach(function (favInfo) {
     self.favList.push(favInfo);
   })
 
-  //Adds Yelp info and Displays info when list name or marker is clicked on
-  
+  // Adds Yelp info and Displays info when list name or marker is clicked on
 
 
-  //Filters list and markers based on user input in the search bar
+  // Add animation to markers
+  self.bounce = function (mark) {
+    toggleBounce(markers[mark.zIndex]);
+  }
+
+  // Filters list and markers based on user input in the search bar
   self.searchLocation.subscribe(function (loc) {
 
-    //Runs code if the search bar is not blank
+    // Runs code if the search bar is not blank
     if (loc !== '') {
       var locLength = loc.length;
 
-      //Clears observable array
+      // Clears observable array
       self.favList.removeAll();
 
-      //Runs through each object in favorites to compare to user input
+      // Runs through each object in favorites to compare to user input
       favorites.forEach(function (favInfo) {
         var favTitle = favInfo.title;
 
-        //Runs through each letter in the location name
+        // Runs through each letter in the location name
         for (var i = 0; i < favTitle.length; i++) {
           var fav = '';
 
-          //Adds on additional letters to match the user input string length
+          // Adds on additional letters to match the user input string length
           for (var j = 0; j < locLength; j++) {
             fav = fav + favTitle[i+j];
           }
 
-          //Runs if the location name's string matches the user input's string
+          // Runs if the location name's string matches the user input's string
           if (fav.toLowerCase() == loc.toLowerCase()) {
-            //Adds location name to array and exits the loop for said location name
+            // Adds location name to array and exits the loop for said location name
             self.favList.push(favInfo);
             return
           }
         }
       })
 
-      //Clears markers from google maps and adds the new arrays
+      // Clears markers from google maps and adds the new arrays
       deleteMarkers();
       setMarkers(map, self.favList());
 
     }else {
-      //Clears observable array and then populates it with all of favorites' objects
+      // Clears observable array and then populates it with all of favorites' objects
       self.favList.removeAll();
 
       favorites.forEach(function (favInfo) {
         self.favList.push(favInfo);
       })
 
-      //Clears markers from google maps and adds the new arrays
+      // Clears markers from google maps and adds the new arrays
       deleteMarkers();
       setMarkers(map, self.favList());
     }
