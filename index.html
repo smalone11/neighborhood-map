@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width">
 
     <title>Project 5</title>
 
@@ -11,14 +11,16 @@
 </head>
 <body>
 
-  <form class="searchForm" method="get">
-    <h4>Search</h4>
-    <input type="text" class ="searchBar" data-bind="textInput: searchLocation">
-  </form>
-
   <div id="searchMap" class="row">
+    <div id="results" class="col-xs-4 col-sm-3 col-md-2">
 
-    <div id="results" class="col-xs-2 col-md-2">
+      <h4>Seattle Locations</h4>
+
+      <form class="searchForm" method="get">
+        <input class ="searchBar" type="text" placeholder="Location" data-bind="textInput: searchLocation">
+
+        <image class="filter" src="images/filter.png" alt="Filter Button"></image>
+      </form>
 
       <!-- <div class="row">
 
@@ -28,17 +30,14 @@
 
       </div> -->
 
-      <div id="key">Key Locations</div>
+      <!--<div id="key">Key Locations</div> -->
 
       <div data-bind="foreach: favList">
-
         <h5 id="favLoc" data-bind="text: title, click: $parent.bounce"></h5>
-
       </div>
     </div>
 
-
-    <div id="map" class="col-xs-10 col-md-10"></div>
+    <div id="map" class="col-xs-8 col-sm-9 col-md-10"></div>
   </div>
 
   <script src="js/lib/knockout-3.2.0.js"></script>
