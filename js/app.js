@@ -5,35 +5,35 @@ var favorites = [
     'lat': 47.5916418,
     'lng': -122.3354621,
     'zIndex': 1,
-    'info': 'Safeco Field'
+    'fourID': '4b155088f964a520beb023e3'
   },
   {
     'title': 'The Crumpet Shop',
     'lat': 47.6090057,
     'lng': -122.3403555,
     'zIndex': 2,
-    'info': 'The Crumpet Shop'
+    'fourID': '441dff3bf964a52076311fe3'
   },
   {
     'title': 'Seattle Art Museum',
     'lat': 47.606646,
     'lng': -122.3395729,
     'zIndex': 3,
-    'info': 'Seattle Art Museum'
+    'fourID': '42a63500f964a5200a251fe3'
   },
   {
     'title': 'Showbox SoDo',
     'lat': 47.5874092,
     'lng': -122.3344886,
     'zIndex': 4,
-    'info': 'Showbox SoDo'
+    'fourID': '472e59eaf964a520074c1fe3'
   },
   {
     'title': 'GameWorks',
     'lat': 47.611404,
     'lng': -122.3354338,
     'zIndex': 5,
-    'info': 'GameWorks'
+    'fourID': '40b7d280f964a5208d001fe3'
   }
 ];
 
@@ -69,8 +69,10 @@ var setMarkers = function (map, favList) {
     });
 
     var info = new google.maps.InfoWindow({
-      content: fav.info
+      content: ''
     });
+
+    addFoursquare(fav, info);
 
     markerExtras(map, marker, info);
 
@@ -90,6 +92,36 @@ var markerExtras = function (map, marker, info) {
   marker.addListener('click', function() {
     info.open(map, marker);
   });
+
+}
+
+// Adds Foursquare info in Info Window for the specific marker.
+var addFoursquare = function (fav, info) {
+  var fourURL = 'https://api.foursquare.com/v2/venues/' + fav.fourID + '?client_id=N3WPKKSJCPDE0LEJZAAXODSVDDZ2T4TXXZBGZCOKB4G34PTQ&client_secret=0ZF3AFUJF2TZTHBBK3MGVGD1M53PJ153JYNMQJT3AQZ14ZVS&v=20130815';
+
+  $.getJSON(fourURL, function (data) {
+    var key = data.response.venue;
+    var hours, description;
+
+    
+
+    if (key.name !== 'Safeco Field' && key.name !== 'Showbox SoDo') {
+      hours = key.hours.status;
+    }else {
+      hours = 'None listed';
+    }
+
+    var contents ='<div><h3>' + key.name + '</h3>' +
+    '<p>' + key.location.formattedAddress + '</p>' +
+    '<p><h6>Hours: </h6>' + hours + '</p>' +
+    '<p><h6>Rating: </h6>' + key.rating + '/10</p>' +
+    '<a href="' + key.canonicalUrl + '" target="_blank"><img src="images/foursquare-logomark.png" alt="Foursquare Link"></img></a></div>';
+
+    info.setContent(contents);
+  })
+    .fail(function () {
+      info.setContent('Could Not Access Foursquare');
+    });
 
 }
 
@@ -126,9 +158,6 @@ var ViewModel = function () {
   favorites.forEach(function (favInfo) {
     self.favList.push(favInfo);
   })
-
-  // Adds Yelp info and Displays info when list name or marker is clicked on.
-
 
   // Triggers animation and info window for marker when name of marker is clicked on
   self.bounce = function (mark) {
