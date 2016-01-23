@@ -101,9 +101,7 @@ var addFoursquare = function (fav, info) {
 
   $.getJSON(fourURL, function (data) {
     var key = data.response.venue;
-    var hours, description;
-
-    
+    var hours;
 
     if (key.name !== 'Safeco Field' && key.name !== 'Showbox SoDo') {
       hours = key.hours.status;
