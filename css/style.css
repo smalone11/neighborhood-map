@@ -5,7 +5,8 @@ html, body {
   padding: 0;
 }
 
-.searchForm {
+
+.search-form {
   height: 30px;
   width: 100%;
   padding-left: 3px;
@@ -14,7 +15,8 @@ html, body {
   display: inline-flex;
 }
 
-.searchBar {
+
+.search-bar {
   height: 100%;
   width: 100%;
   border: 0px;
@@ -23,22 +25,25 @@ html, body {
   color: #000000;
 }
 
+
 .filter {
   height: 100%;
   width: 15%;
 }
 
+
 h4 {
   text-align: center;
-  margin-right: 35px;
   margin-bottom: 15px;
   font-size: 20px;
 }
+
 
 h5 {
   padding-left: 5px;
   font-size: 17px;
 }
+
 
 h6 {
   display: inline;
@@ -46,10 +51,12 @@ h6 {
   font-size: 13px;
 }
 
-#searchMap {
+
+#search-map {
   height: 100%;
   padding: 0px;
 }
+
 
 #results {
   height: inherit;
@@ -58,94 +65,64 @@ h6 {
   color: #b7b7b7;
 }
 
+
 #menu {
   max-height: 50px;
   max-width: 50px;
 }
+
 
 #map {
   height: inherit;
   padding: 0px;
 }
 
-#favLoc {
+
+#fav-loc {
   margin: 0;
   padding-top: 10px;
   padding-left: 5px;
   padding-bottom: 10px;
 }
 
-#favLoc:hover {
+
+#fav-loc:hover {
   background-color: #373737;
   color: #ffffff;
   font-weight: bold;
 }
 
-@media (max-width: 1350px) {
+
+@media (max-width: 1127px) {
   .col-md-2 {
-    width: 20%;
+    width: 193px;
   }
 
   .col-md-10 {
-    width: 80%;
+    width: calc(100% - 193px);
+  }
 }
 
-@media (max-width: 1150px) {
+
+@media (max-width: 549px) {
   .col-md-2 {
-    width: 25%;
+    width: 120px;
   }
 
   .col-md-10 {
-    width: 75%;
-  }
-}
-
-@media (max-width: 900px) {
-  .col-sm-3 {
-    width: 30%;
+    width: calc(100% - 120px);
   }
 
-  .col-sm-9 {
-    width: 70%;
-  }
-}
-
-@media (max-width: 760px) {
-  .col-xs-4 {
-    width: 35%;
+  .search-bar {
+    font-size: 10px; /* 14px */
   }
 
-  .col-xs-8 {
-    width: 65%;
-  }
-}
-
-@media (max-width: 650px) {
-  .col-xs-4 {
-    width: 40%;
+  h4 {
+    font-size: 16px; /* 20px */
   }
 
-  .col-xs-8 {
-    width: 60%;
-  }
-}
-
-@media (max-width: 540px) {
-  .col-xs-4 {
-    width: 45%;
+  h5 {
+    font-size: 13px; /* 17px */
   }
 
-  .col-xs-8 {
-    width: 55%;
-  }
-}
-
-@media (max-width: 475px) {
-  .col-xs-4 {
-    width: 50%;
-  }
-
-  .col-xs-8 {
-    width: 50%;
-  }
 }

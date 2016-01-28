@@ -1,5 +1,13 @@
+'use strict';
+
+// Pops up a window if there is an error with the Google maps <script>.
+var googleError = function () {
+  window.alert('Could Not Load Google Map!')
+  return true;
+}
+
 // Data for the markers to be listed by name, LatLng, and zIndex.
-var favorites = [
+var favoriteLocations = [
   {
     'title': 'Safeco Field',
     'lat': 47.5916418,
@@ -37,21 +45,20 @@ var favorites = [
   }
 ];
 
-var map;
+var map, info;
 var markers = [];
 
 // Creates custom Google Maps map.
 var initMap = function () {
-  var myLatLng = {lat: 47.6010942, lng: -122.3359881};
-
   // Create a map object and specify the DOM element for display.
   map = new google.maps.Map(document.getElementById('map'), {
-    center: myLatLng,
     scrollwheel: false,
     zoom: 14
   });
 
-  setMarkers(map, favorites);
+  info = new google.maps.InfoWindow();
+
+  setMarkers(map, favoriteLocations);
 }
 
 // Adds markers to the map.
@@ -68,35 +75,28 @@ var setMarkers = function (map, favList) {
       zIndex: i
     });
 
-    var info = new google.maps.InfoWindow({
-      content: ''
-    });
-
-    addFoursquare(fav, info);
-
-    markerExtras(map, marker, info);
+    addMarkerEvents(map, marker, fav);
 
     markers.push(marker);
   }
+  map.setCenter({lat: 47.6010942, lng: -122.3359881});
 }
 
 // Adds animation and info to a marker.
-var markerExtras = function (map, marker, info) {
+var addMarkerEvents = function (map, marker, fav) {
   marker.addListener('click', function () {
+    map.setCenter(marker.getPosition());
     marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function() {
       marker.setAnimation(null);
     }, 1400);
+    addFoursquare(fav);
+    info.open(map, this);
   });
-
-  marker.addListener('click', function() {
-    info.open(map, marker);
-  });
-
 }
 
 // Adds Foursquare info in Info Window for the specific marker.
-var addFoursquare = function (fav, info) {
+var addFoursquare = function (fav) {
   var fourURL = 'https://api.foursquare.com/v2/venues/' + fav.fourID + '?client_id=N3WPKKSJCPDE0LEJZAAXODSVDDZ2T4TXXZBGZCOKB4G34PTQ&client_secret=0ZF3AFUJF2TZTHBBK3MGVGD1M53PJ153JYNMQJT3AQZ14ZVS&v=20130815';
 
   $.getJSON(fourURL, function (data) {
@@ -118,7 +118,7 @@ var addFoursquare = function (fav, info) {
     info.setContent(contents);
   })
     .fail(function () {
-      info.setContent('Could Not Access Foursquare');
+      info.setContent('Could Not Access Foursquare!');
     });
 
 }
@@ -142,7 +142,7 @@ function deleteMarkers () {
 }
 
 // Triggers animation and info window for marker.
-function toggleBounce (map, mark) {
+function triggerMarkerEvents (map, mark) {
   google.maps.event.trigger(mark, 'click');
 }
 
@@ -150,20 +150,20 @@ var ViewModel = function () {
   var self = this;
 
   self.favList = ko.observableArray([]);
-  self.searchLocation = ko.observable('');
+  self.userInput = ko.observable('');
 
-  // Populate observable array from favorites.
-  favorites.forEach(function (favInfo) {
+  // Populate observable array from favoriteLocations.
+  favoriteLocations.forEach(function (favInfo) {
     self.favList.push(favInfo);
   })
 
   // Triggers animation and info window for marker when name of marker is clicked on
-  self.bounce = function (mark) {
-    toggleBounce(map, markers[mark.zIndex]);
+  self.markerEvents = function (mark) {
+    triggerMarkerEvents(map, markers[mark.zIndex]);
   }
 
   // Filters list and markers based on user input in the search bar.
-  self.searchLocation.subscribe(function (loc) {
+  self.userInput.subscribe(function (loc) {
 
     // Runs code if the search bar is not blank.
     if (loc !== '') {
@@ -173,7 +173,7 @@ var ViewModel = function () {
       self.favList.removeAll();
 
       // Runs through each object in favorites to compare to user input.
-      favorites.forEach(function (favInfo) {
+      favoriteLocations.forEach(function (favInfo) {
         var favTitle = favInfo.title;
 
         // Runs through each letter in the location name.
@@ -202,7 +202,7 @@ var ViewModel = function () {
       // Clears observable array and then populates it with all of favorites' objects.
       self.favList.removeAll();
 
-      favorites.forEach(function (favInfo) {
+      favoriteLocations.forEach(function (favInfo) {
         self.favList.push(favInfo);
       })
 
@@ -210,9 +210,7 @@ var ViewModel = function () {
       deleteMarkers();
       setMarkers(map, self.favList());
     }
-
   })
-
 }
 
 ko.applyBindings( new ViewModel() );
