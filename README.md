@@ -2,7 +2,7 @@
 
 ## Running the Application
 
-1. Open index.html in browser to run the application.
+1. Open *index.html* in web browser to run the application.
 
 ## Features
 
